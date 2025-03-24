@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Price Visualization</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/lightweight-charts@4.1.1/dist/lightweight-charts.standalone.production.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="content">
+            <h1 class="title">Stock Price Visualization</h1>
+            <div class="stock-selector">
+                <select id="tickerSelect" class="glow-button">
+                    <option value="">Select a stock</option>
+                    <option value="AAPL">Apple (AAPL)</option>
+                    <option value="AMZN">Amazon (AMZN)</option>
+                    <option value="TSLA">Tesla (TSLA)</option>
+                </select>
+            </div>
+            <div id="chartContainer" class="chart-container"></div>
+            <div class="loading" id="loading">Loading...</div>
+        </div>
+    </div>
+    <script src="stocks.js"></script>
+</body>
+</html> 
