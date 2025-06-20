@@ -7,6 +7,10 @@
 #include <chrono>
 #include <iomanip>
 #include <sstream>
+#include "order_book.h"
+#include "coinbase_api.h"
+#include "kraken_api.h"
+#include "gemini_api.h"
 
 using json = nlohmann::json;
 
@@ -222,6 +226,82 @@ int main() {
             response["price"] = it->second;
             return crow::response(response.dump());
         });
+
+    // API endpoint for trading on best price
+    CROW_ROUTE(app, "/api/trade").methods("POST"_method)
+    ([&](const crow::request& req) {
+        try {
+            auto x = json::parse(req.body);
+            std::string pair = x["pair"];
+            std::string side = x["side"];
+            double quantity = x["quantity"];
+
+            // Initialize exchange APIs (replace with real keys/secrets in production)
+            CoinbaseAPI coinbase("API_KEY", "API_SECRET", "PASSPHRASE");
+            KrakenAPI kraken("API_KEY", "API_SECRET");
+            GeminiAPI gemini("API_KEY", "API_SECRET");
+            OrderBook ob(&coinbase, &kraken, &gemini);
+            auto consolidated = ob.buildConsolidatedOrderBook();
+            auto book = consolidated[pair];
+
+            // Find best price and exchange
+            double best_price = 0;
+            std::string best_exchange;
+            if (side == "buy") {
+                best_price = 1e12;
+                // Check asks
+                if (!book["asks"].empty()) {
+                    for (const auto& ask : book["asks"]) {
+                        if (ask[0] < best_price) best_price = ask[0];
+                    }
+                }
+            } else {
+                best_price = 0;
+                // Check bids
+                if (!book["bids"].empty()) {
+                    for (const auto& bid : book["bids"]) {
+                        if (bid[0] > best_price) best_price = bid[0];
+                    }
+                }
+            }
+
+            // Determine which exchange has the best price
+            std::string exchanges[3] = {"coinbase", "kraken", "gemini"};
+            double prices[3] = {0, 0, 0};
+            // Fetch top-of-book from each exchange
+            prices[0] = (side == "buy") ? ob.fetchCoinbaseOrderBook(pair)["asks"][0][0] : ob.fetchCoinbaseOrderBook(pair)["bids"][0][0];
+            prices[1] = (side == "buy") ? ob.fetchKrakenOrderBook(pair)["asks"][0][0] : ob.fetchKrakenOrderBook(pair)["bids"][0][0];
+            prices[2] = (side == "buy") ? ob.fetchGeminiOrderBook(pair)["asks"][0][0] : ob.fetchGeminiOrderBook(pair)["bids"][0][0];
+            int best_idx = 0;
+            for (int i = 1; i < 3; ++i) {
+                if ((side == "buy" && prices[i] < prices[best_idx]) || (side == "sell" && prices[i] > prices[best_idx])) {
+                    best_idx = i;
+                }
+            }
+            best_exchange = exchanges[best_idx];
+
+            // Execute order on the best exchange
+            json exec_result;
+            if (best_exchange == "coinbase") {
+                exec_result = coinbase.placeOrder(side, pair, quantity);
+            } else if (best_exchange == "kraken") {
+                exec_result = kraken.placeOrder(pair, side, "market", quantity);
+            } else if (best_exchange == "gemini") {
+                exec_result = gemini.placeOrder(pair, side, quantity);
+            }
+
+            json response;
+            response["pair"] = pair;
+            response["side"] = side;
+            response["quantity"] = quantity;
+            response["best_price"] = prices[best_idx];
+            response["exchange"] = best_exchange;
+            response["execution"] = exec_result;
+            return crow::response(response.dump());
+        } catch (const std::exception& e) {
+            return crow::response(500, json{{"error", e.what()}}.dump());
+        }
+    });
 
     // Start server
     app.port(3000).multithreaded().run();

@@ -105,3 +105,21 @@ This project includes a web-based front-end to view the consolidated order book 
    - Open your browser and go to [http://localhost:3000/orderbook.html](http://localhost:3000/orderbook.html)
 
 You will see a table for each of the top 10 crypto pairs, showing the consolidated bids and asks from Coinbase, Kraken, and Gemini.
+
+## Crypto Trading Application
+
+This project now includes a trading application that allows you to:
+- View the consolidated order book for the top 10 crypto pairs (from Coinbase, Kraken, and Gemini)
+- Enter a trade (pair, buy/sell, quantity)
+- The backend finds the best price across all three exchanges and executes the trade on the best venue
+- The result of the trade (including which exchange was used) is displayed to the user
+
+### How to Use
+
+1. **Start the backend and frontend as described above.**
+2. **Open your browser and go to:**
+   [http://localhost:3000/trade.html](http://localhost:3000/trade.html)
+3. **Enter your trade details and submit.**
+4. **The app will show the best price, the exchange used, and the execution result.**
+
+> **Note:** You must configure your real API keys/secrets for Coinbase, Kraken, and Gemini in the backend for live trading.

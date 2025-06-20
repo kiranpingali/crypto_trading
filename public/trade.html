@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto Trading App</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Crypto Trading Application</h1>
+        <form id="trade-form">
+            <label for="pair">Crypto Pair:</label>
+            <select id="pair" name="pair"></select>
+            <label for="side">Side:</label>
+            <select id="side" name="side">
+                <option value="buy">Buy</option>
+                <option value="sell">Sell</option>
+            </select>
+            <label for="quantity">Quantity:</label>
+            <input type="number" id="quantity" name="quantity" min="0.0001" step="0.0001" required>
+            <button type="submit" class="glow-button">Submit Order</button>
+        </form>
+        <div id="trade-result"></div>
+        <h2>Consolidated Order Book</h2>
+        <div id="orderbook-container"></div>
+        <a href="/" class="glow-button">Back to Home</a>
+    </div>
+    <script src="trade.js"></script>
+</body>
+</html> 
