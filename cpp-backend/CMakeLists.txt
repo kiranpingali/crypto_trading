@@ -49,4 +49,12 @@ add_library(kraken_api STATIC src/kraken_api.cpp)
 target_link_libraries(kraken_api PRIVATE CURL::libcurl nlohmann_json::nlohmann_json)
 target_include_directories(kraken_api PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-target_link_libraries(stock_server PRIVATE kraken_api) 
+target_link_libraries(stock_server PRIVATE kraken_api)
+
+# Add Gemini API integration component
+add_library(gemini_api STATIC src/gemini_api.cpp)
+
+target_link_libraries(gemini_api PRIVATE CURL::libcurl nlohmann_json::nlohmann_json)
+target_include_directories(gemini_api PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+
+target_link_libraries(stock_server PRIVATE gemini_api) 
