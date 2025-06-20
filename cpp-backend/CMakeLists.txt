@@ -57,4 +57,12 @@ add_library(gemini_api STATIC src/gemini_api.cpp)
 target_link_libraries(gemini_api PRIVATE CURL::libcurl nlohmann_json::nlohmann_json)
 target_include_directories(gemini_api PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-target_link_libraries(stock_server PRIVATE gemini_api) 
+target_link_libraries(stock_server PRIVATE gemini_api)
+
+# Add Consolidated Order Book component
+add_library(order_book STATIC src/order_book.cpp)
+
+target_link_libraries(order_book PRIVATE CURL::libcurl nlohmann_json::nlohmann_json coinbase_api kraken_api gemini_api)
+target_include_directories(order_book PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+
+target_link_libraries(stock_server PRIVATE order_book) 
