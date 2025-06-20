@@ -29,4 +29,16 @@ target_link_libraries(stock_server PRIVATE
 # Include directories
 target_include_directories(stock_server PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/include
-) 
+)
+
+# Add Coinbase API integration component
+add_library(coinbase_api STATIC src/coinbase_api.cpp)
+
+# Link dependencies for the Coinbase API component
+target_link_libraries(coinbase_api PRIVATE CURL::libcurl nlohmann_json::nlohmann_json)
+
+# Ensure include directory is available for all targets
+target_include_directories(coinbase_api PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+
+# Link the new component to the main executable
+target_link_libraries(stock_server PRIVATE coinbase_api) 
