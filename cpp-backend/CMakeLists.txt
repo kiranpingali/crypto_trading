@@ -41,4 +41,12 @@ target_link_libraries(coinbase_api PRIVATE CURL::libcurl nlohmann_json::nlohmann
 target_include_directories(coinbase_api PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 # Link the new component to the main executable
-target_link_libraries(stock_server PRIVATE coinbase_api) 
+target_link_libraries(stock_server PRIVATE coinbase_api)
+
+# Add Kraken API integration component
+add_library(kraken_api STATIC src/kraken_api.cpp)
+
+target_link_libraries(kraken_api PRIVATE CURL::libcurl nlohmann_json::nlohmann_json)
+target_include_directories(kraken_api PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+
+target_link_libraries(stock_server PRIVATE kraken_api) 
