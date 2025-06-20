@@ -62,3 +62,17 @@ This project includes a C++ component for connecting to the Gemini crypto exchan
 - **Build:** Integrated via CMake; linked to the main executable
 
 You can use the `GeminiAPI` class to place orders on Gemini. See the header file for available methods and required parameters.
+
+## Consolidated Order Book
+
+This project includes a C++ component that builds a consolidated order book for the top 10 crypto pairs by volume, aggregating data from Coinbase, Kraken, and Gemini.
+
+- **Location:** `cpp-backend/include/order_book.h`, `cpp-backend/src/order_book.cpp`
+- **Features:**
+  - Fetches order book data from all three exchanges for the top 10 pairs
+  - Aggregates and merges bids/asks into a single consolidated order book per pair
+  - Uses nlohmann::json for all data representation
+  - Designed for extensibility and further analytics
+- **Build:** Integrated via CMake; linked to the main executable
+
+You can use the `OrderBook` class to fetch and build a consolidated order book. See the header file for available methods and required parameters.
