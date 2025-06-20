@@ -1,6 +1,6 @@
 {
-  "name": "project1",
-  "version": "1.0.0",
+  "name": "@kiranpingali/crypto_trading",
+  "version": "1.0.1",
   "description": "A modern dark-themed Hello World web application",
   "main": "server.js",
   "scripts": {
@@ -10,9 +10,16 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kiranpingali/crypto_trading.git"
+  },
   "dependencies": {
     "axios": "^1.8.4",
     "express": "^4.18.2",
     "yahoo-finance2": "^2.13.3"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
   }
 }
