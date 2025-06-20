@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const yahooFinance = require('yahoo-finance2').default;
+const { execFile } = require('child_process');
 const app = express();
 const port = 3000;
 
@@ -153,6 +154,23 @@ app.get('/api/price/:symbol', (req, res) => {
     }
     
     res.json({ symbol, price: lastPrice });
+});
+
+// API endpoint for consolidated order book
+app.get('/api/orderbook', (req, res) => {
+    execFile('./cpp-backend/build/stock_server', ['--orderbook'], (error, stdout, stderr) => {
+        if (error) {
+            console.error('Error running C++ backend:', error);
+            return res.status(500).json({ error: 'Failed to fetch order book', details: error.message });
+        }
+        try {
+            const orderBook = JSON.parse(stdout);
+            res.json(orderBook);
+        } catch (e) {
+            console.error('Error parsing order book JSON:', e);
+            res.status(500).json({ error: 'Invalid order book JSON', details: e.message });
+        }
+    });
 });
 
 app.listen(port, () => {

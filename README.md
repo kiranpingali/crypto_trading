@@ -76,3 +76,32 @@ This project includes a C++ component that builds a consolidated order book for 
 - **Build:** Integrated via CMake; linked to the main executable
 
 You can use the `OrderBook` class to fetch and build a consolidated order book. See the header file for available methods and required parameters.
+
+## Web-based Front-End for Consolidated Order Book
+
+This project includes a web-based front-end to view the consolidated order book for the top 10 crypto pairs by volume.
+
+- **Location:** `public/orderbook.html`, `public/orderbook.js`
+- **How it works:**
+  - The Node.js backend exposes an API endpoint `/api/orderbook` that runs the C++ backend to fetch the consolidated order book as JSON.
+  - The front-end fetches this data and displays it in a responsive table for each crypto pair.
+
+### How to Run
+
+1. **Build the C++ backend:**
+   - Make sure you have built the C++ backend so that `./cpp-backend/build/stock_server` exists and supports the `--orderbook` flag to output the consolidated order book as JSON.
+
+2. **Install Node.js dependencies:**
+   ```sh
+   npm install
+   ```
+
+3. **Start the Node.js server:**
+   ```sh
+   node server.js
+   ```
+
+4. **View the order book:**
+   - Open your browser and go to [http://localhost:3000/orderbook.html](http://localhost:3000/orderbook.html)
+
+You will see a table for each of the top 10 crypto pairs, showing the consolidated bids and asks from Coinbase, Kraken, and Gemini.
