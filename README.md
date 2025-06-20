@@ -1,6 +1,5 @@
-# Project1
-
-This is a new project. Add your project description here.
+# crypto_trading
+An institutional-grade crypto trading platform that will serve to provide best execution and prices for crypto traders.
 
 ## Getting Started
 
@@ -20,4 +19,4 @@ Guidelines for contributing to the project will go here.
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details. 
+This project is licensed under the MIT License - see the LICENSE file for details.
